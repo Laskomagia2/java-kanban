@@ -1,51 +1,54 @@
 import java.util.HashMap;
-import java.util.ArrayList;
 
 public class Manager {
-    public static ArrayList<AbstractTask> allTasks = new ArrayList<>();
-    public static HashMap<Integer ,AbstractTask> newTasks = new HashMap<>();
-    public static HashMap<Integer, AbstractTask> inProgressTasks = new HashMap<>();
-    public static HashMap<Integer,AbstractTask> doneTasks = new HashMap<>();
+    protected HashMap<Integer, Task> allTasks = new HashMap<>();
+    protected HashMap<Integer ,Task> newTasks = new HashMap<>();
+    protected HashMap<Integer, Task> inProgressTasks = new HashMap<>();
+    protected HashMap<Integer,Task> doneTasks = new HashMap<>();
 
     public void createTask(Task userTask){
         newTasks.put(userTask.taskId, userTask);
+        allTasks.put(userTask.getTaskId(), userTask);
+    }
+
+    public void createSubtask(Task userTask){
+        newTasks.put(userTask.taskId, userTask);
+        allTasks.put(userTask.getTaskId(), userTask);
     }
 
     public void createEpic(Epic epic){
         newTasks.put(epic.taskId, epic);
+        allTasks.put(epic.getTaskId(), epic);
     }
 
-    public void putTaskInEpic(Epic epic, Task task){
-        epic.addSubtask(task);
-    }
-
-    public ArrayList<AbstractTask> getListOfTasks(){
+    public HashMap<Integer, Task> getListOfTasks(){
         return allTasks;
     }
 
-    public AbstractTask getTaskById(Integer id){
-        for(AbstractTask task : allTasks){
-            if(id.equals(task.getTaskId())){
-                return task;
-            }
+    protected HashMap<Integer,Subtask> getEpicSubtasks(Epic epic){
+        return epic.getSubTasks();
+    }
+
+    public Task getTaskById(Integer id){
+        if (allTasks.containsKey(id)){
+            return allTasks.get(id);
         }
         return null;
     }
 
-    public void taskInProgress(AbstractTask task){
-        task.setStatus("IN_PROGRESS");
-        inProgressTasks.put(task.getTaskId(), task);
+    public HashMap<Integer, Task> getDoneTasks() {
+        return doneTasks;
     }
 
-    public void doneTask(Task task){
-        task.statusIsDone();
+    public HashMap<Integer, Task> getInProgressTasks() {
+        return inProgressTasks;
     }
 
-    public void doneSubtask(Epic epic, Task subtask){
-        epic.setSubtaskDone(subtask);
+    public HashMap<Integer, Task> getNewTasks() {
+        return newTasks;
     }
 
-    public void changeTask(AbstractTask currentTask, AbstractTask newTask){
+    public void changeTask(Task currentTask, Task newTask){
         currentTask = newTask;
     }
 
@@ -57,11 +60,7 @@ public class Manager {
     }
 
     public void removeAllTasksById(int id){
-        for (AbstractTask task : allTasks){
-            if (task.getTaskId() == id){
-                allTasks.remove(id);
-            }
-        }
+        allTasks.remove(id);
         newTasks.remove(id);
         inProgressTasks.remove(id);
         doneTasks.remove(id);

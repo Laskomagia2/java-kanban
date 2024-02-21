@@ -1,34 +1,17 @@
-import java.util.ArrayList;
-public class Epic extends AbstractTask{
-    protected ArrayList<Task> subtasks;
-    public Epic(String name, String context) {
+import java.util.HashMap;
+public class Epic extends Task{
+    protected HashMap<Integer, Subtask> subtasks;
+    protected Epic(String name, String context) {
         super(name, context);
-        subtasks = new ArrayList<>();
+        subtasks = new HashMap<>();
     }
 
-    @Override
-    public void statusIsDone(){
-        for (Task task : subtasks){
-            if (task.status != Status.DONE){
-                return;
-            }
-        }
-        setStatus("DONE");
-        Manager.doneTasks.put(this.taskId, this);
+    public void addSubtask(Subtask subtask){
+        subtasks.put(subtask.getTaskId(), subtask);
     }
 
-    public void addSubtask(Task subtask){
-        subtasks.add(subtask);
-    }
-
-    public void setSubtaskDone(Task task){
-        task.statusIsDone();
-        for(Task t : subtasks){
-            if(t.equals(task)){
-                t.statusIsDone();
-                Manager.doneTasks.put(t.taskId, t);
-            }
-        }
+    public HashMap<Integer, Subtask> getSubTasks(){
+        return subtasks;
     }
 
     @Override
@@ -40,10 +23,10 @@ public class Epic extends AbstractTask{
                 ", taskStatus=" + status + '\'' +
                 ", subtasks=" + subtasks + '\'';
 
-        if(context != null) { // проверяем, что поле не содержит null
-            result = result + ", extraInfo.length=" + context.length(); // выводим не значение, а длину
+        if(context != null) {
+            result = result + ", extraInfo.length=" + context.length();
         } else {
-            result = result + ", extraInfo=null"; // выводим информацию, что поле равно null
+            result = result + ", extraInfo=null";
         }
 
         return result + '}';
