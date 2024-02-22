@@ -20,6 +20,21 @@ public class Manager {
         newTasks.put(epic.taskId, epic);
         allTasks.put(epic.getTaskId(), epic);
     }
+    public void setTaskIsDone(Task task){
+        task.statusIsDone();
+        doneTasks.put(task.getTaskId(), task);
+    }
+    public void setSubtaskIsDone(Subtask sub){
+        sub.statusIsDone();
+        doneTasks.put(sub.getTaskId(), sub);
+        for (Subtask task : sub.epic.subtasks.values()){
+            if (task.getStatus() != Status.DONE){
+                break;
+            }
+            sub.epic.statusIsDone();
+            doneTasks.put(sub.epic.getTaskId(), sub.epic);
+        }
+    }
 
     public HashMap<Integer, Task> getListOfTasks(){
         return allTasks;
