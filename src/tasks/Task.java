@@ -1,5 +1,5 @@
+package tasks;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Task {
@@ -12,7 +12,6 @@ public class Task {
         this.name = name;
         this.context = context;
         this.status = Status.NEW;
-        this.taskId = hashCode();
     }
 
     @Override
@@ -36,16 +35,12 @@ public class Task {
 
     }
 
+    public void setTaskId(int id){
+        taskId = id;
+    }
+
     public void setStatus(String status){
         this.status = Status.valueOf(status);
-    }
-
-    public void statusIsInProgress(){
-        setStatus("IN_PROGRESS");
-    }
-
-    public void statusIsDone(){
-        setStatus("DONE");
     }
 
     public void setContext(String context){
