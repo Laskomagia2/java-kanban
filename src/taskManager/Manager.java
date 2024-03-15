@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Manager {
-    static int taskId = 0;
+    private static int taskId = 0;
 
-    protected HashMap<Integer, Task> tasks = new HashMap<>();
-    protected HashMap<Integer ,Subtask> subtasks = new HashMap<>();
-    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    final protected HashMap<Integer, Task> tasks = new HashMap<>();
+    final protected HashMap<Integer ,Subtask> subtasks = new HashMap<>();
+    final protected HashMap<Integer, Epic> epics = new HashMap<>();
 
     public void createTask(Task userTask){
         taskId ++;
@@ -20,7 +20,7 @@ public class Manager {
     public void createSubtask(Subtask userTask){
         taskId ++;
         userTask.setTaskId(taskId);
-        epics.get(userTask.getEpicId()).setStatus("IN_PROGRESS");
+        checkEpicStatus(epics.get(userTask.getEpicId()).getTaskId());
         epics.get(userTask.getEpicId()).addSubtask(userTask);
         subtasks.put(userTask.getTaskId(), userTask);
     }
@@ -48,11 +48,15 @@ public class Manager {
     }
 
     public ArrayList<Task> getListOfTasks(){
-        ArrayList<Task> allTasks = new ArrayList<>();
-        allTasks.addAll(tasks.values());
-        allTasks.addAll(subtasks.values());
-        allTasks.addAll(epics.values());
-        return allTasks;
+        return new ArrayList<>(tasks.values());
+    }
+
+    public ArrayList<Task> getListOfSubtasks(){
+        return new ArrayList<>(subtasks.values());
+    }
+
+    public ArrayList<Task> getListOfEpics(){
+        return new ArrayList<>(epics.values());
     }
 
     public ArrayList<Subtask> getEpicSubtasks(Epic epic){
@@ -67,9 +71,17 @@ public class Manager {
         if(tasks.get(id) != null){
             return tasks.get(id);
         }
+        return null;
+    }
+
+    public Subtask getSubtaskById(Integer id){
         if(subtasks.get(id) != null){
             return subtasks.get(id);
         }
+        return null;
+    }
+
+    public Epic getEpicById(Integer id){
         if (epics.get(id) != null){
             return epics.get(id);
         }
@@ -84,8 +96,8 @@ public class Manager {
 
     public void updateSubtask(Subtask newTask){
         if (newTask != null) {
-            epics.get(newTask.getEpicId()).setStatus("IN_PROGRESS");
             subtasks.put(newTask.getTaskId(), newTask);
+            checkEpicStatus(epics.get(newTask.getEpicId()).getTaskId());
         }
     }
 
@@ -101,28 +113,47 @@ public class Manager {
 
     public void removeSubtasks(){
         subtasks.clear();
+        for (Epic epic : epics.values()){
+            epic.getSubTasks().clear();
+            checkEpicStatus(epic.getTaskId());
+        }
+
     }
 
     public void removeEpics(){
         epics.clear();
+        subtasks.clear();
     }
 
     public void removeTasksById(int id){
         tasks.remove(id);
     }
 
-    public void removeSubtasksById(int id){
-        int epicId = subtasks.get(id).getEpicId();
-        subtasks.remove(id);
-        for(Integer subId : epics.get(epicId).getSubTasks()){
-            if(subtasks.get(subId).getStatus() != Status.DONE){
-                break;
+    public void removeSubtasksById(int subId){
+        int epicId = subtasks.get(subId).getEpicId();
+        subtasks.remove(subId);
+        epics.get(epicId).getSubTasks().remove(subId);
+        checkEpicStatus(epicId);
+    }
+
+    public void removeEpicsById(int epicId){
+        for (Integer subId : epics.get(epicId).getSubTasks()){
+            subtasks.remove(subId);
+        }
+        epics.remove(epicId);
+    }
+
+    public void checkEpicStatus(int epicId){
+        if (epics.get(epicId).getSubTasks().isEmpty()) {
+            epics.get(epicId).setStatus("NEW");
+        } else {
+            for (Integer subId : epics.get(epicId).getSubTasks()) {
+                if (subtasks.get(subId).getStatus() != Status.DONE) {
+                    epics.get(epicId).setStatus("IN_PROGRESS");
+                    return;
+                }
             }
             epics.get(epicId).setStatus("DONE");
         }
-    }
-
-    public void removeEpicsById(int id){
-        epics.remove(id);
     }
 }

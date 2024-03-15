@@ -1,8 +1,10 @@
 package tasks;
 
 import java.util.ArrayList;
+
 public class Epic extends Task{
-    protected ArrayList<Integer> subtasks;
+    private final ArrayList<Integer> subtasks;
+
     protected Epic(String name, String context) {
         super(name, context);
         subtasks = new ArrayList<>();
