@@ -31,22 +31,6 @@ public class Manager {
         epics.put(epic.getTaskId(), epic);
     }
 
-    public void setTaskStatus(Task task, String status){
-        task.setStatus(status);
-    }
-
-    public void setSubtaskStatus(Subtask subtask, String status){
-        if(status.equals("DONE")){
-            for(Integer subId : epics.get(subtask.getEpicId()).getSubTasks()){
-                if(subtasks.get(subId).getStatus() != Status.DONE){
-                    break;
-                }
-                epics.get(subtask.getEpicId()).setStatus("DONE");
-            }
-        }
-        subtask.setStatus(status);
-    }
-
     public ArrayList<Task> getListOfTasks(){
         return new ArrayList<>(tasks.values());
     }
