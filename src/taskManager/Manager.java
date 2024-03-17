@@ -20,9 +20,9 @@ public class Manager {
     public void createSubtask(Subtask userTask){
         taskId ++;
         userTask.setTaskId(taskId);
-        checkEpicStatus(epics.get(userTask.getEpicId()).getTaskId());
         epics.get(userTask.getEpicId()).addSubtask(userTask);
         subtasks.put(userTask.getTaskId(), userTask);
+        checkEpicStatus(epics.get(userTask.getEpicId()).getTaskId());
     }
 
     public void createEpic(Epic epic){
