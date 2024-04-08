@@ -8,7 +8,7 @@ public class Task {
     protected Status status;
     protected int taskId;
 
-    protected Task(String name, String context){
+    public Task(String name, String context){
         this.name = name;
         this.context = context;
         this.status = Status.NEW;
@@ -16,7 +16,7 @@ public class Task {
 
     @Override
     public int hashCode(){
-        int hash = 15;
+        int hash = 5;
         if (name != null){
             hash = name.hashCode();
         }
@@ -79,5 +79,4 @@ public class Task {
 
         return result + '}';
     }
-
 }
