@@ -27,8 +27,8 @@ public class ProgramTest {
         int t1Id = complTask1.getTaskId();
 
         Task t2 = new Task("A", "B");
-        taskManager.createTask(t1);
-        Task complTask2 = taskManager.getTaskById(t1.getTaskId());
+        taskManager.createTask(t2);
+        Task complTask2 = taskManager.getTaskById(t2.getTaskId());
         int t2Id = complTask2.getTaskId();
 
         Assertions.assertEquals(t1Id, t2Id, "Мимо мимо");
@@ -51,8 +51,7 @@ public class ProgramTest {
 
     @Test
     void testUtilClass(){
-        Managers managers1 = new Managers();
-        InMemoryTaskManager taskManager1 = (InMemoryTaskManager) managers1.getDefault();
+        InMemoryTaskManager taskManager1 = (InMemoryTaskManager) Managers.getDefault();
         Task task1 = new Task("А", "Б");
         taskManager1.createTask(task1);
         Assertions.assertNotNull(taskManager1.getListOfTasks().get(0));
