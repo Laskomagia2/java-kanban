@@ -1,9 +1,10 @@
 package test;
 
 import org.junit.jupiter.api.BeforeEach;
-import taskManager.InMemoryHistoryManager;
+import taskManager.HistoryManager;
 import taskManager.InMemoryTaskManager;
 import taskManager.Managers;
+import taskManager.TaskManager;
 import tasks.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,12 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 public class ProgramTest {
-    InMemoryTaskManager taskManager;
-    InMemoryHistoryManager historyManager;
+    TaskManager taskManager;
+    HistoryManager historyManager;
     @BeforeEach
     void beforeEach() {
-        taskManager = (InMemoryTaskManager) Managers.getDefault();
-        historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
+        taskManager = Managers.getDefault();
+        historyManager = Managers.getDefaultHistory();
     }
 
     @Test

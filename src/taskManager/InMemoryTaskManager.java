@@ -11,7 +11,7 @@ public class InMemoryTaskManager implements TaskManager {
     final protected HashMap<Integer ,Subtask> subtasks = new HashMap<>();
     final protected HashMap<Integer, Epic> epics = new HashMap<>();
 
-    protected ArrayList<Task> idHistory = new ArrayList<>();
+    final protected HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public void createTask(Task userTask){
@@ -69,12 +69,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(Integer id){
         if(tasks.get(id) != null){
-            if(idHistory.size() < 10){
-                idHistory.add(tasks.get(id));
-            } else {
-                idHistory.remove(0);
-                idHistory.add(tasks.get(id));
-            }
+            historyManager.add(tasks.get(id));
             return tasks.get(id);
         }
         return null;
@@ -83,12 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(Integer id){
         if(subtasks.get(id) != null){
-            if(idHistory.size() < 10){
-                idHistory.add(subtasks.get(id));
-            } else {
-                idHistory.remove(0);
-                idHistory.add(subtasks.get(id));
-            }
+            historyManager.add(subtasks.get(id));
             return subtasks.get(id);
         }
         return null;
@@ -97,12 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(Integer id){
         if (epics.get(id) != null){
-            if(idHistory.size() < 10){
-                idHistory.add(epics.get(id));
-            } else {
-                idHistory.remove(0);
-                idHistory.add(epics.get(id));
-            }
+            historyManager.add(epics.get(id));
             return epics.get(id);
         }
         return null;
@@ -175,7 +160,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Task> getHistory(){
-        return idHistory;
+        return historyManager.getHistory();
     }
 
     public void checkEpicStatus(int epicId){

@@ -3,20 +3,15 @@ package taskManager;
 import tasks.Task;
 
 public class Managers {
+    private Managers(){}
     private static TaskManager taskManager;
     private static HistoryManager historyManager;
 
     public static TaskManager getDefault(){
-        if (taskManager == null){
-            return new InMemoryTaskManager();
-        }
-        return taskManager;
+        return new InMemoryTaskManager();
     }
 
     public static HistoryManager getDefaultHistory(){
-        if (historyManager == null){
-            return new InMemoryHistoryManager();
-        }
-        return historyManager;
+        return new InMemoryHistoryManager();
     }
 }
