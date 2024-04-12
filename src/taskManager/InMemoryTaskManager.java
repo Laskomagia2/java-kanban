@@ -7,11 +7,11 @@ import java.util.HashMap;
 public class InMemoryTaskManager implements TaskManager {
     private static int taskId = 0;
 
-    final protected HashMap<Integer, Task> tasks = new HashMap<>();
-    final protected HashMap<Integer ,Subtask> subtasks = new HashMap<>();
-    final protected HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer ,Subtask> subtasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
 
-    final protected HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public void createTask(Task userTask){
