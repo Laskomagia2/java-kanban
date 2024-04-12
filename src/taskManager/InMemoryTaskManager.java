@@ -94,6 +94,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public ArrayList<Task> getHistory(){
+        return historyManager.getHistory();
+    }
+
+    @Override
     public void updateTask(Task newTask){
         if (newTask != null) {
             tasks.put(newTask.getTaskId(), newTask);
@@ -155,12 +160,6 @@ public class InMemoryTaskManager implements TaskManager {
             subtasks.remove(subId);
         }
         epics.remove(epicId);
-    }
-
-
-    @Override
-    public ArrayList<Task> getHistory(){
-        return historyManager.getHistory();
     }
 
     public void checkEpicStatus(int epicId){
