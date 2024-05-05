@@ -8,27 +8,27 @@ public class Task {
     protected Status status;
     protected int taskId;
 
-    public Task(String name, String context){
+    public Task(String name, String context) {
         this.name = name;
         this.context = context;
         this.status = Status.NEW;
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         int hash = 5;
-        if (name != null){
+        if (name != null) {
             hash = name.hashCode();
         }
-        if (context != null){
+        if (context != null) {
             hash += context.hashCode();
         }
         return hash;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return Objects.equals(taskId, task.taskId);
@@ -71,7 +71,7 @@ public class Task {
                 ", taskId='" + taskId + '\'' +
                 ", taskStatus=" + status + '\'';
 
-        if(context != null) { // проверяем, что поле не содержит null
+        if (context != null) { // проверяем, что поле не содержит null
             result = result + ", extraInfo.length=" + context.length(); // выводим не значение, а длину
         } else {
             result = result + ", extraInfo=null"; // выводим информацию, что поле равно null

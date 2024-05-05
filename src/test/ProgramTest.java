@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.LinkedList;
 
 public class ProgramTest {
     TaskManager taskManager;
@@ -21,7 +22,7 @@ public class ProgramTest {
     }
 
     @Test
-    void idTasksEquals(){
+    void idTasksEquals() {
         Task t1 = new Task("A", "B");
         taskManager.createTask(t1);
         Task complTask1 = taskManager.getTaskById(t1.getTaskId());
@@ -36,7 +37,7 @@ public class ProgramTest {
     }
 
     @Test
-    void idTasksHairsEquals(){
+    void idTasksHairsEquals() {
         Epic t1 = new Epic("A", "B");
         taskManager.createEpic(t1);
         Epic complEpic1 = taskManager.getEpicById(t1.getTaskId());
@@ -51,7 +52,7 @@ public class ProgramTest {
     }
 
     @Test
-    void testUtilClass(){
+    void testUtilClass() {
         InMemoryTaskManager taskManager1 = (InMemoryTaskManager) Managers.getDefault();
         Task task1 = new Task("А", "Б");
         taskManager1.createTask(task1);
@@ -59,7 +60,7 @@ public class ProgramTest {
     }
 
     @Test
-    void testTaskManager(){
+    void testTaskManager() {
         Task task = new Task("А", "Б");
         taskManager.createTask(task);
 
@@ -75,7 +76,7 @@ public class ProgramTest {
     }
 
     @Test
-    void testTaskID(){
+    void testTaskID() {
         Task task = new Task("А", "Б");
         task.setTaskId(1234);
         taskManager.createTask(task);
@@ -83,7 +84,7 @@ public class ProgramTest {
     }
 
     @Test
-    void testCreateTaskInManager(){
+    void testCreateTaskInManager() {
         Task task = new Task("А", "Б");
         task.setTaskId(1234);
         int idBefore = task.getTaskId();
@@ -99,11 +100,47 @@ public class ProgramTest {
     }
 
     @Test
-    void historyTest(){
+    void historyTest() {
         Task task1 = new Task("А", "Б");
         historyManager.add(task1);
         final List<Task> history = historyManager.getHistory();
         Assertions.assertNotNull(history, "История не пустая.");
         Assertions.assertEquals(1, history.size(), "История не пустая.");
+    }
+
+    @Test
+    void orderHistoryTest() {
+        Task task1 = new Task("А", "Б");
+        taskManager.createTask(task1);
+
+        Task task2 = new Task("В", "Г");
+        taskManager.createTask(task2);
+
+        List<Task> rightHistoryOrder = new LinkedList<>();
+        rightHistoryOrder.add(task1);
+        rightHistoryOrder.add(task2);
+
+
+        taskManager.getTaskById(task1.getTaskId());
+        taskManager.getTaskById(task2.getTaskId());
+
+        List<Task> currentHistory = taskManager.getHistory();
+
+        Assertions.assertArrayEquals(currentHistory.toArray(), rightHistoryOrder.toArray());
+    }
+
+    @Test
+    void sameTaskInHistory(){
+        Task task1 = new Task("А", "Б");
+        taskManager.createTask(task1);
+
+        List<Task> rightHistoryOrder = List.of(task1);
+
+        taskManager.getTaskById(task1.getTaskId());
+        taskManager.getTaskById(task1.getTaskId());
+
+        taskManager.getHistory();
+
+        Assertions.assertArrayEquals(taskManager.getHistory().toArray(), rightHistoryOrder.toArray());
     }
 }
