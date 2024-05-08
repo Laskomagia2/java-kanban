@@ -12,8 +12,8 @@ public class DoubleLinkedList {
     private Node head;
     private Node tail;
 
-    public Map<Integer, Node> getHistoryHashMap() {
-        return historyHashMap;
+    public boolean containsKeyInList(Integer taskId) {
+        return historyHashMap.containsKey(taskId);
     }
 
     public void linkLast (Task task) {
@@ -67,6 +67,7 @@ public class DoubleLinkedList {
             node.next.prev = node.prev;
         }
         node.item = null;
+        historyHashMap.remove(taskId);
     }
 
     private static class Node {

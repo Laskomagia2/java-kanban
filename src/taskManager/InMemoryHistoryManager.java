@@ -6,11 +6,11 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private  final DoubleLinkedList handMadeLinkedList = new DoubleLinkedList();
+    private final DoubleLinkedList handMadeLinkedList = new DoubleLinkedList();
 
     @Override
     public void add(Task task) {
-        if (handMadeLinkedList.getHistoryHashMap().containsKey(task.getTaskId())) {
+        if (handMadeLinkedList.containsKeyInList(task.getTaskId())) {
             remove(task.getTaskId());
         }
         handMadeLinkedList.linkLast(task);
@@ -19,7 +19,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int id) {
         handMadeLinkedList.removeNode(id);
-        handMadeLinkedList.getHistoryHashMap().remove(id);
     }
 
     @Override
