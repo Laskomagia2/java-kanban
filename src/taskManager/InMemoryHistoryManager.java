@@ -1,24 +1,28 @@
 package taskManager;
 
-import tasks.Epic;
-import tasks.Subtask;
 import tasks.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    protected ArrayList<Task> history = new ArrayList<>();
+
+    private final DoubleLinkedList handMadeLinkedList = new DoubleLinkedList();
 
     @Override
     public void add(Task task) {
-        if (history.size() >=10 ) {
-            history.remove(0);
+        if (handMadeLinkedList.containsKeyInList(task.getTaskId())) {
+            remove(task.getTaskId());
         }
-        history.add(task);
+        handMadeLinkedList.linkLast(task);
     }
 
-    public ArrayList<Task> getHistory(){
-        return history;
+    @Override
+    public void remove(int id) {
+        handMadeLinkedList.removeNode(id);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return handMadeLinkedList.getTasks();
     }
 }

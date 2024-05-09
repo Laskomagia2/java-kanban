@@ -2,7 +2,7 @@ package tasks;
 
 import java.util.ArrayList;
 
-public class Epic extends Task{
+public class Epic extends Task {
     private final ArrayList<Integer> subtasks;
 
     public Epic(String name, String context) {
@@ -27,7 +27,7 @@ public class Epic extends Task{
                 ", taskStatus=" + status + '\'' +
                 ", subtasks=" + subtasks + '\'';
 
-        if(context != null) {
+        if (context != null) {
             result = result + ", extraInfo.length=" + context.length();
         } else {
             result = result + ", extraInfo=null";
