@@ -1,5 +1,7 @@
 package tasks;
 
+import taskManager.TaskType;
+
 import java.util.Objects;
 
 public class Task {
@@ -7,11 +9,13 @@ public class Task {
     protected String context;
     protected Status status;
     protected int taskId;
+    protected TaskType taskType;
 
     public Task(String name, String context) {
         this.name = name;
         this.context = context;
         this.status = Status.NEW;
+        this.taskType = TaskType.TASK;
     }
 
     @Override
@@ -63,6 +67,10 @@ public class Task {
         return taskId;
     }
 
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
     @Override
     public String toString() {
 
@@ -71,10 +79,10 @@ public class Task {
                 ", taskId='" + taskId + '\'' +
                 ", taskStatus=" + status + '\'';
 
-        if (context != null) { // проверяем, что поле не содержит null
-            result = result + ", extraInfo.length=" + context.length(); // выводим не значение, а длину
+        if (context != null) {
+            result = result + ", extraInfo.length=" + context.length();
         } else {
-            result = result + ", extraInfo=null"; // выводим информацию, что поле равно null
+            result = result + ", extraInfo=null";
         }
 
         return result + '}';

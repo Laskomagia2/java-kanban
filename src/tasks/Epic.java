@@ -1,5 +1,7 @@
 package tasks;
 
+import taskManager.TaskType;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -8,6 +10,7 @@ public class Epic extends Task {
     public Epic(String name, String context) {
         super(name, context);
         subtasks = new ArrayList<>();
+        this.taskType = TaskType.EPIC;
     }
 
     public void addSubtask(Integer subtaskId){
@@ -21,7 +24,7 @@ public class Epic extends Task {
     @Override
     public String toString() {
 
-        String result = "Task{" +
+        String result = "Epic{" +
                 "name='" + name + '\'' +
                 ", taskId='" + taskId + '\'' +
                 ", taskStatus=" + status + '\'' +
