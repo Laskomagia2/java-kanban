@@ -1,9 +1,9 @@
-package taskManager;
-
-import tasks.Task;
+package com.taskManager;
 
 public class Managers {
-    private Managers() {}
+    private Managers() {
+
+    }
 
     public static FileBackedTaskManager getFileBacked() {
         return new FileBackedTaskManager();

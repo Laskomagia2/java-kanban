@@ -1,6 +1,6 @@
 package tasks;
 
-import taskManager.TaskType;
+import com.taskManager.TaskType;
 
 public class Subtask extends Task {
     private final Integer epicId;

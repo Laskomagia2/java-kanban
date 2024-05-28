@@ -1,4 +1,4 @@
-package taskManager;
+package com.taskManager;
 
 import tasks.*;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package tasks;
 
-import taskManager.TaskType;
+import com.taskManager.TaskType;
 
 import java.util.ArrayList;
 
