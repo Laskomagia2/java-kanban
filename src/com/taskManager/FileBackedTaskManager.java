@@ -13,10 +13,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     Path path;
 
-    public FileBackedTaskManager () {
+    public FileBackedTaskManager() {
     }
 
-    public FileBackedTaskManager (String path) {
+    public FileBackedTaskManager(String path) {
         this.path = Paths.get(path);
     }
 
@@ -138,7 +138,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static String taskToString(Task task) {
         String res;
-        res = String.format("%d,"+task.getTaskType()+",%s,"+task.getStatus()+",%s", task.getTaskId(), task.getName(), task.getContext());
+        res = String.format("%d," + task.getTaskType() + ",%s," + task.getStatus() + ",%s", task.getTaskId(), task.getName(), task.getContext());
         if (task.getTaskType() == TaskType.SUBTASK) {
             StringBuilder sb = new StringBuilder(res);
             sb.append(",");
