@@ -13,11 +13,11 @@ public class Epic extends Task {
         this.taskType = TaskType.EPIC;
     }
 
-    public void addSubtask(Integer subtaskId){
+    public void addSubtask(Integer subtaskId) {
         subtasks.add(subtaskId);
     }
 
-    public ArrayList<Integer> getSubTasks(){
+    public ArrayList<Integer> getSubTasks() {
         return subtasks;
     }
 
