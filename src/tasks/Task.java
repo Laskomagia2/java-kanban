@@ -39,27 +39,27 @@ public class Task {
 
     }
 
-    public void setTaskId(int id){
+    public void setTaskId(int id) {
         taskId = id;
     }
 
-    public void setStatus(String status){
+    public void setStatus(String status) {
         this.status = Status.valueOf(status);
     }
 
-    public void setContext(String context){
+    public void setContext(String context) {
         this.context = context;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public String getContext(){
+    public String getContext() {
         return this.context;
     }
 
-    public Status getStatus(){
+    public Status getStatus() {
         return status;
     }
 
