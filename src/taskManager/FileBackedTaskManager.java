@@ -12,7 +12,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
+
+    Path path;
+
+    public FileBackedTaskManager () {
+    }
+
+    public FileBackedTaskManager (String path) {
+        this.path = Paths.get(path);
+    }
 
     @Override
     public void createTask(Task userTask) {
@@ -86,8 +95,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         save();
     }
 
-    private void save() throws ManagerSaveException{
-        Path path = Paths.get("SavedTasks.csv");
+    private void save() {
+        path = Paths.get("SavedTasks.csv");
         try (FileWriter writer = new FileWriter(String.valueOf(path), StandardCharsets.UTF_8)) {
             for (Task task : tasks.values()) {
                 writer.write(taskToString(task));
@@ -103,18 +112,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         }
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException{
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager();
         try (FileReader reader = new FileReader(file)) {
             BufferedReader br = new BufferedReader(reader);
             while (br.ready()) {
                 String line = br.readLine();
-                if (line.contains("TASK")) {
-                    manager.createTask(fromString(line));
-                } else if (line.contains("SUBTASK")) {
-                    manager.createSubtask((Subtask)fromString(line));
-                } else {
-                    manager.createEpic((Epic)fromString(line));
+                TaskType taskType = TaskType.typeFinder(line);
+                switch (taskType) {
+                    case TASK:
+                        manager.createTask(fromString(line));
+                        break;
+                    case SUBTASK:
+                        manager.createSubtask((Subtask)fromString(line));
+                        break;
+                    case EPIC:
+                        manager.createEpic((Epic)fromString(line));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Недопустимое значение " + taskType);
                 }
             }
         } catch (IOException except) {
@@ -127,28 +143,44 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         String res;
         res = String.format("%d,"+task.getTaskType()+",%s,"+task.getStatus()+",%s", task.getTaskId(), task.getName(), task.getContext());
         if (task.getTaskType() == TaskType.SUBTASK) {
-            res += "," + ((Subtask) task).getEpicId();
+            StringBuilder sb = new StringBuilder(res);
+            sb.append(",");
+            sb.append(((Subtask) task).getEpicId());
+            res = sb.toString();
         }
         return res + "\n";
     }
 
     public static Task fromString(String value) {
         String[] temp = value.split(",");
-        if (TaskType.valueOf(temp[1]) == TaskType.TASK) {
-            Task task = new Task(temp[2], temp[4]);
-            task.setStatus(temp[3]);
-            task.setTaskId(Integer.parseInt(temp[0]));
-            return task;
-        } else if (TaskType.valueOf(temp[1]) == TaskType.SUBTASK) {
-            Subtask subtask = new Subtask(temp[2], temp[4], Integer.valueOf(temp[5]));
-            subtask.setStatus(temp[3]);
-            subtask.setTaskId(Integer.parseInt(temp[0]));
-            return  subtask;
-        } else {
-            Epic epic = new Epic(temp[2], temp[4]);
-            epic.setStatus(temp[3]);
-            epic.setTaskId(Integer.parseInt(temp[0]));
-            return epic;
+        int currentTaskId = Integer.parseInt(temp[0]);
+        TaskType taskType = TaskType.valueOf(temp[1]);
+        String taskName = temp[2];
+        String taskStatus = temp[3];
+        String taskContext = temp[4];
+
+        switch (taskType) {
+            case TASK:
+                Task task = new Task(taskName, taskContext);
+                task.setStatus(taskStatus);
+                task.setTaskId(currentTaskId);
+                return task;
+
+            case SUBTASK:
+                int subEpicId = Integer.parseInt(temp[5]);
+                Subtask subtask = new Subtask(taskName, taskContext, subEpicId);
+                subtask.setStatus(taskStatus);
+                subtask.setTaskId(currentTaskId);
+                return subtask;
+
+            case EPIC:
+                Epic epic = new Epic(taskName, taskContext);
+                epic.setStatus(taskStatus);
+                epic.setTaskId(currentTaskId);
+                return epic;
+
+            default:
+                throw new IllegalArgumentException("Недопустимое значене: " + taskType);
         }
     }
 }

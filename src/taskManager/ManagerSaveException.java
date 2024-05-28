@@ -2,7 +2,7 @@ package taskManager;
 
 public class ManagerSaveException extends RuntimeException {
 
-    ManagerSaveException (Throwable except) {
+    public ManagerSaveException (Exception except) {
         super(except);
     }
 }
