@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedList;
@@ -21,6 +19,7 @@ public class ProgramTest {
     TaskManager taskManager;
     HistoryManager historyManager;
     FileBackedTaskManager backedTaskManager;
+
     @BeforeEach
     void beforeEach() {
         taskManager = Managers.getDefault();
@@ -137,7 +136,7 @@ public class ProgramTest {
     }
 
     @Test
-    void sameTaskInHistory(){
+    void sameTaskInHistory() {
         Task task1 = new Task("А", "Б");
         taskManager.createTask(task1);
 
