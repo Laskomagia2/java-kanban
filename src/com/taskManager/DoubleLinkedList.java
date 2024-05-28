@@ -16,7 +16,7 @@ public class DoubleLinkedList {
         return historyHashMap.containsKey(taskId);
     }
 
-    public void linkLast (Task task) {
+    public void linkLast(Task task) {
         Node node = null;
         if (task != null) {
             if (this.tail == null) {
