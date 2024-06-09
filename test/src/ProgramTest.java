@@ -1,5 +1,3 @@
-package test;
-
 import org.junit.jupiter.api.BeforeEach;
 import com.taskManager.HistoryManager;
 import com.taskManager.InMemoryTaskManager;
