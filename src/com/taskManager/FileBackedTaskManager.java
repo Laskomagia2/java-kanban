@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    Path path;
+    private Path path = Paths.get("SavedTasks.csv");
 
     public FileBackedTaskManager() {
     }
@@ -92,8 +92,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+    @Override
+    public void removeAllTasks() {
+        super.removeAllTasks();
+        save();
+    }
+
     private void save() {
-        path = Paths.get("SavedTasks.csv");
         try (FileWriter writer = new FileWriter(String.valueOf(path), StandardCharsets.UTF_8)) {
             for (Task task : tasks.values()) {
                 writer.write(taskToString(task));
@@ -115,7 +120,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             BufferedReader br = new BufferedReader(reader);
             while (br.ready()) {
                 String line = br.readLine();
-                TaskType taskType = TaskType.typeFinder(line);
+                String[] splitLine = line.split(",");
+                TaskType taskType = TaskType.valueOf(splitLine[1]);
                 switch (taskType) {
                     case TASK:
                         manager.createTask(fromString(line));

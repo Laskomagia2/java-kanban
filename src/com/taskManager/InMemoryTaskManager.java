@@ -179,6 +179,12 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.remove(epicId);
     }
 
+    @Override
+    public void removeAllTasks() {
+        removeTasks();
+        removeEpics();
+    }
+
     public void checkEpicStatus(int epicId) {
         if (epics.get(epicId).getSubTasks().isEmpty()) {
             epics.get(epicId).setStatus("NEW");
