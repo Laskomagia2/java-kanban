@@ -92,12 +92,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    @Override
-    public void removeAllTasks() {
-        super.removeAllTasks();
-        save();
-    }
-
     private void save() {
         try (FileWriter writer = new FileWriter(String.valueOf(path), StandardCharsets.UTF_8)) {
             for (Task task : tasks.values()) {
