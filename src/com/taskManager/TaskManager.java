@@ -1,4 +1,4 @@
-package taskManager;
+package com.taskManager;
 
 import tasks.Epic;
 import tasks.Subtask;
@@ -45,6 +45,8 @@ public interface TaskManager {
     void removeSubtasksById(int subId);
 
     void removeEpicsById(int epicId);
+
+    void removeAllTasks();
 
     List<Task> getHistory();
 }
