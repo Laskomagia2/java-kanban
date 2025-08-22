@@ -35,7 +35,7 @@ public class ProgramTest {
         Task complTask1 = taskManager.getTaskById(t1.getTaskId());
         int t1Id = complTask1.getTaskId();
 
-        LocalDateTime secondTaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        LocalDateTime secondTaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 5, 18, 0);
         Duration taskSecondDuration = Duration.ofHours(24);
         Task t2 = new Task("A", "B", secondTaskStartTime, taskSecondDuration);
         taskManager.createTask(t2);
