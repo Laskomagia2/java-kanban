@@ -1,7 +1,7 @@
 package com.taskManager;
 
 import programComparators.CompareTasksByDate;
-import programExceptions.DateTimeIntersectionException;
+import programexceptions.DateTimeIntersectionException;
 import tasks.*;
 
 import java.time.Duration;
