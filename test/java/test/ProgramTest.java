@@ -1,16 +1,15 @@
 package test;
 
+import com.taskManager.*;
 import org.junit.jupiter.api.BeforeEach;
-import com.taskManager.HistoryManager;
-import com.taskManager.InMemoryTaskManager;
-import com.taskManager.FileBackedTaskManager;
-import com.taskManager.Managers;
-import com.taskManager.TaskManager;
 import tasks.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedList;
@@ -29,12 +28,16 @@ public class ProgramTest {
 
     @Test
     void idTasksEquals() {
-        Task t1 = new Task("A", "B");
+        LocalDateTime firstTaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        Duration taskFirstDuration = Duration.ofHours(24);
+        Task t1 = new Task("A", "B", firstTaskStartTime, taskFirstDuration);
         taskManager.createTask(t1);
         Task complTask1 = taskManager.getTaskById(t1.getTaskId());
         int t1Id = complTask1.getTaskId();
 
-        Task t2 = new Task("A", "B");
+        LocalDateTime secondTaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        Duration taskSecondDuration = Duration.ofHours(24);
+        Task t2 = new Task("A", "B", secondTaskStartTime, taskSecondDuration);
         taskManager.createTask(t2);
         Task complTask2 = taskManager.getTaskById(t2.getTaskId());
         int t2Id = complTask2.getTaskId();
@@ -44,12 +47,16 @@ public class ProgramTest {
 
     @Test
     void idTasksHairsEquals() {
-        Epic t1 = new Epic("A", "B");
+        LocalDateTime firstTaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        Duration taskFirstDuration = Duration.ofHours(24);
+        Epic t1 = new Epic("A", "B", firstTaskStartTime, taskFirstDuration);
         taskManager.createEpic(t1);
         Epic complEpic1 = taskManager.getEpicById(t1.getTaskId());
         int t1Id = complEpic1.getTaskId();
 
-        Epic t2 = new Epic("A", "B");
+        LocalDateTime secondTaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        Duration taskSecondDuration = Duration.ofHours(24);
+        Epic t2 = new Epic("A", "B", secondTaskStartTime, taskSecondDuration);
         taskManager.createEpic(t2);
         Epic complEpic2 = taskManager.getEpicById(t2.getTaskId());
         int t2Id = complEpic2.getTaskId();
@@ -59,21 +66,29 @@ public class ProgramTest {
 
     @Test
     void testUtilClass() {
+        LocalDateTime taskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 20, 18, 0);
+        Duration taskDuration = Duration.ofHours(24);
         InMemoryTaskManager taskManager1 = (InMemoryTaskManager) Managers.getDefault();
-        Task task1 = new Task("А", "Б");
+        Task task1 = new Task("А", "Б", taskStartTime, taskDuration);
         taskManager1.createTask(task1);
         Assertions.assertNotNull(taskManager1.getListOfTasks().get(0));
     }
 
     @Test
     void testTaskManager() {
-        Task task = new Task("А", "Б");
+        LocalDateTime taskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        Duration taskDuration = Duration.ofHours(24);
+        Task task = new Task("А", "Б", taskStartTime, taskDuration);
         taskManager.createTask(task);
 
-        Epic epic = new Epic("А", "Б");
+        LocalDateTime epicStartTime = LocalDateTime.of(2024, Month.DECEMBER, 1, 18, 0);
+        Duration epicDuration = Duration.ofHours(24);
+        Epic epic = new Epic("А", "Б", epicStartTime, epicDuration);
         taskManager.createEpic(epic);
 
-        Subtask sub1 = new Subtask("В", "Г", epic.getTaskId());
+        LocalDateTime subtaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 20, 18, 0);
+        Duration subtaskDuration = Duration.ofHours(24);
+        Subtask sub1 = new Subtask("В", "Г", epic.getTaskId(), subtaskStartTime, subtaskDuration);
         taskManager.createSubtask(sub1);
 
         Assertions.assertEquals(task, taskManager.getTaskById(task.getTaskId()));
@@ -83,7 +98,9 @@ public class ProgramTest {
 
     @Test
     void testTaskID() {
-        Task task = new Task("А", "Б");
+        LocalDateTime taskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        Duration taskDuration = Duration.ofHours(24);
+        Task task = new Task("А", "Б", taskStartTime, taskDuration);
         task.setTaskId(1234);
         taskManager.createTask(task);
         Assertions.assertEquals(1234, task.getTaskId());
@@ -91,7 +108,9 @@ public class ProgramTest {
 
     @Test
     void testCreateTaskInManager() {
-        Task task = new Task("А", "Б");
+        LocalDateTime taskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 14, 18, 0);
+        Duration taskDuration = Duration.ofHours(24);
+        Task task = new Task("А", "Б", taskStartTime, taskDuration);
         task.setTaskId(1234);
         int idBefore = task.getTaskId();
         String nameBefore = task.getName();
@@ -107,7 +126,9 @@ public class ProgramTest {
 
     @Test
     void historyTest() {
-        Task task1 = new Task("А", "Б");
+        LocalDateTime taskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 20, 18, 0);
+        Duration taskDuration = Duration.ofHours(24);
+        Task task1 = new Task("А", "Б", taskStartTime, taskDuration);
         historyManager.add(task1);
         final List<Task> history = historyManager.getHistory();
         Assertions.assertNotNull(history, "История не пустая.");
@@ -116,10 +137,14 @@ public class ProgramTest {
 
     @Test
     void orderHistoryTest() {
-        Task task1 = new Task("А", "Б");
+        LocalDateTime taskFirstStartTime = LocalDateTime.of(2024, Month.DECEMBER, 19, 18, 0);
+        Duration taskFirstDuration = Duration.ofHours(24);
+        Task task1 = new Task("А", "Б", taskFirstStartTime, taskFirstDuration);
         taskManager.createTask(task1);
 
-        Task task2 = new Task("В", "Г");
+        LocalDateTime taskSecondStartTime = LocalDateTime.of(2024, Month.DECEMBER, 21, 18, 0);
+        Duration taskSecondDuration = Duration.ofHours(24);
+        Task task2 = new Task("В", "Г", taskSecondStartTime, taskSecondDuration);
         taskManager.createTask(task2);
 
         List<Task> rightHistoryOrder = new LinkedList<>();
@@ -137,7 +162,9 @@ public class ProgramTest {
 
     @Test
     void sameTaskInHistory() {
-        Task task1 = new Task("А", "Б");
+        LocalDateTime taskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 20, 18, 0);
+        Duration taskDuration = Duration.ofHours(24);
+        Task task1 = new Task("А", "Б", taskStartTime, taskDuration);
         taskManager.createTask(task1);
 
         List<Task> rightHistoryOrder = List.of(task1);
@@ -152,8 +179,12 @@ public class ProgramTest {
 
     @Test
     void testBackedManager() throws IOException {
-        Task t1 = new Task("A", "B");
-        Task t2 = new Task("B", "C");
+        LocalDateTime taskFirstStartTime = LocalDateTime.of(2024, Month.DECEMBER, 20, 18, 0);
+        LocalDateTime taskSecondStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        Duration taskFirstDuration = Duration.ofHours(24);
+        Duration taskSecondDuration = Duration.ofHours(24);
+        Task t1 = new Task("A", "B", taskFirstStartTime, taskFirstDuration);
+        Task t2 = new Task("B", "C", taskSecondStartTime, taskSecondDuration);
 
         backedTaskManager.createTask(t1);
         backedTaskManager.createTask(t2);
@@ -188,13 +219,22 @@ public class ProgramTest {
 
     @Test
     void testBackedManagerLoad() throws IOException {
-        Task t1 = new Task("A", "B");
+        LocalDateTime taskFirstStartTime = LocalDateTime.of(2024, Month.DECEMBER, 20, 18, 0);
+        LocalDateTime taskSecondStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        LocalDateTime epicStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        LocalDateTime subtaskStartTime = LocalDateTime.of(2024, Month.DECEMBER, 26, 18, 0);
+        Duration taskFirstDuration = Duration.ofHours(20);
+        Duration taskSecondDuration = Duration.ofHours(23);
+        Duration epicDuration = Duration.ofHours(21);
+        Duration subtaskDuration = Duration.ofHours(20);
+
+        Task t1 = new Task("A", "B", taskFirstStartTime, taskFirstDuration);
         backedTaskManager.createTask(t1);
-        Task t2 = new Task("B", "C");
-        backedTaskManager.createTask(t2);
-        Epic epic = new Epic("V", "Z");
+        Task t2 = new Task("B", "C", taskSecondStartTime, taskSecondDuration);
+        Epic epic = new Epic("V", "Z", epicStartTime, epicDuration);
         backedTaskManager.createEpic(epic);
-        Subtask sub1 = new Subtask("D", "C", epic.getTaskId());
+        Subtask sub1 = new Subtask("D", "C", epic.getTaskId(), subtaskStartTime, subtaskDuration);
+        backedTaskManager.createTask(t2);
         backedTaskManager.createSubtask(sub1);
 
         List<Task> currentFileList = new ArrayList<>();
@@ -210,7 +250,46 @@ public class ProgramTest {
         loadedFileList.addAll(newFileBackedManager.getListOfSubtasks());
         loadedFileList.addAll(newFileBackedManager.getListOfEpics());
 
-
         Assertions.assertArrayEquals(new List[]{loadedFileList}, new List[]{currentFileList});
     }
+
+    @Test
+    void testEpicStatus() {
+        LocalDateTime epicStartTime = LocalDateTime.of(2024, Month.DECEMBER, 24, 18, 0);
+        LocalDateTime subtaskFirstStartTime = LocalDateTime.of(2024, Month.DECEMBER, 26, 18, 0);
+        LocalDateTime subtaskSecondStartTime = LocalDateTime.of(2024, Month.DECEMBER, 28, 18, 0);
+        Duration epicDuration = Duration.ofHours(21);
+        Duration subtaskFirstDuration = Duration.ofHours(20);
+        Duration subtaskSecondDuration = Duration.ofHours(20);
+
+        Epic epic = new Epic("V", "Z", epicStartTime, epicDuration);
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("D", "C", epic.getTaskId(), subtaskFirstStartTime, subtaskFirstDuration);
+        taskManager.createSubtask(sub1);
+        Subtask sub2 = new Subtask("S", "F", epic.getTaskId(), subtaskSecondStartTime, subtaskSecondDuration);
+        taskManager.createSubtask(sub2);
+
+        Assertions.assertEquals(Status.IN_PROGRESS, taskManager.getEpicById(epic.getTaskId()).getStatus());
+
+        sub1.setStatus("DONE");
+        taskManager.updateSubtask(sub1);
+        sub2.setStatus("DONE");
+        taskManager.updateSubtask(sub2);
+
+        Assertions.assertEquals(Status.DONE, taskManager.getEpicById(epic.getTaskId()).getStatus());
+
+        sub1.setStatus("NEW");
+        taskManager.updateSubtask(sub1);
+
+        Assertions.assertEquals(Status.IN_PROGRESS, taskManager.getEpicById(epic.getTaskId()).getStatus());
+
+        sub1.setStatus("IN_PROGRESS");
+        taskManager.updateSubtask(sub1);
+        sub2.setStatus("IN_PROGRESS");
+        taskManager.updateSubtask(sub2);
+
+        Assertions.assertEquals(Status.IN_PROGRESS, taskManager.getEpicById(epic.getTaskId()).getStatus());
+    }
+
+    
 }

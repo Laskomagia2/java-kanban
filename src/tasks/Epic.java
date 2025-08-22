@@ -2,23 +2,47 @@ package tasks;
 
 import com.taskManager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subtasks;
 
-    public Epic(String name, String context) {
-        super(name, context);
+    protected LocalDateTime endTime;
+
+    public Epic(String name, String context, LocalDateTime startTime, Duration duration) {
+        super(name, context, startTime, duration);
         subtasks = new ArrayList<>();
         this.taskType = TaskType.EPIC;
+        this.startTime = LocalDateTime.of(1, 1, 1, 1, 1, 1);
+        setEndTime(startTime);
+        this.duration = Duration.ZERO;
     }
 
     public void addSubtask(Integer subtaskId) {
         subtasks.add(subtaskId);
     }
 
-    public ArrayList<Integer> getSubTasks() {
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public ArrayList<Integer> getSubtasks() {
         return subtasks;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.taskManager;
+package programExceptions;
 
 public class ManagerSaveException extends RuntimeException {
 

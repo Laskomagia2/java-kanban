@@ -2,11 +2,14 @@ package tasks;
 
 import com.taskManager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private final Integer epicId;
 
-    public Subtask(String name, String context, Integer epicId) {
-        super(name, context);
+    public Subtask(String name, String context, Integer epicId, LocalDateTime startTime, Duration duration) {
+        super(name, context, startTime, duration);
         this.epicId = epicId;
         this.taskType = TaskType.SUBTASK;
     }
