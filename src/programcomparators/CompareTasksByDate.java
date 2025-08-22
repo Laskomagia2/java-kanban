@@ -1,4 +1,4 @@
-package programComparators;
+package programcomparators;
 
 import tasks.Task;
 

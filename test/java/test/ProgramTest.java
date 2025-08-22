@@ -1,6 +1,6 @@
 package test;
 
-import com.taskManager.*;
+import com.taskmanager.*;
 import org.junit.jupiter.api.BeforeEach;
 import tasks.*;
 import org.junit.jupiter.api.Assertions;

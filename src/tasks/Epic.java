@@ -1,6 +1,6 @@
 package tasks;
 
-import com.taskManager.TaskType;
+import com.taskmanager.TaskType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

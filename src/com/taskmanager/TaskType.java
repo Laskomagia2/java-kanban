@@ -1,4 +1,4 @@
-package com.taskManager;
+package com.taskmanager;
 
 public enum TaskType {
     TASK,

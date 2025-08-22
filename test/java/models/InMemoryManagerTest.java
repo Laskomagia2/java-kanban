@@ -1,6 +1,6 @@
 package models;
 
-import com.taskManager.InMemoryTaskManager;
+import com.taskmanager.InMemoryTaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import programexceptions.DateTimeIntersectionException;

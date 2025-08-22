@@ -1,6 +1,6 @@
-package com.taskManager;
+package com.taskmanager;
 
-import programComparators.CompareTasksByDate;
+import programcomparators.CompareTasksByDate;
 import programexceptions.DateTimeIntersectionException;
 import tasks.*;
 

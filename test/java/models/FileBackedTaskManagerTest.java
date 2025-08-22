@@ -1,6 +1,6 @@
 package models;
 
-import com.taskManager.FileBackedTaskManager;
+import com.taskmanager.FileBackedTaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
