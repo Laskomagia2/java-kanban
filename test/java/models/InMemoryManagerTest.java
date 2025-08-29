@@ -1,6 +1,7 @@
 package models;
 
 import com.taskmanager.InMemoryTaskManager;
+import com.taskmanager.Managers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import programexceptions.DateTimeIntersectionException;
@@ -16,7 +17,7 @@ import java.time.Month;
 public class InMemoryManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     public InMemoryManagerTest() {
-        super(new InMemoryTaskManager());
+        super(Managers.getDefault());
     }
 
     @Test
@@ -47,6 +48,7 @@ public class InMemoryManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         Duration epicDuration = Duration.ofHours(24);
         Epic epic = new Epic("А", "Б", epicStartTime, epicDuration);
         taskManager.createEpic(epic);
+        epic.setStartTime(LocalDateTime.of(1, 1, 1, 1, 1, 1));
 
         LocalDateTime currentEpicStartTime = LocalDateTime.of(1, 1, 1, 1, 1, 1);
 

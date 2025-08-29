@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
+    protected static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+
     private Path path = Paths.get("SavedTasks.csv");
 
     public FileBackedTaskManager() {
@@ -142,10 +144,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static String taskToString(Task task) {
         String res;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
         res = String.format("%d," + task.getTaskType() + ",%s," + task.getStatus() + ",%s" + "," +
-                task.getStartTime().format(formatter) + "," + task.getDuration().toMinutes() + "," +
-                task.getEndTime().format(formatter), task.getTaskId(), task.getName(), task.getContext());
+                task.getStartTime().format(FORMATTER) + "," + task.getDuration().toMinutes() + "," +
+                task.getEndTime().format(FORMATTER), task.getTaskId(), task.getName(), task.getContext());
         if (task.getTaskType() == TaskType.SUBTASK) {
             StringBuilder sb = new StringBuilder(res);
             sb.append(",");
@@ -156,16 +157,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static Task fromString(String value) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
         String[] temp = value.split(",");
         int currentTaskId = Integer.parseInt(temp[0]);
         TaskType taskType = TaskType.valueOf(temp[1]);
         String taskName = temp[2];
         String taskStatus = temp[3];
         String taskContext = temp[4];
-        LocalDateTime startTime = LocalDateTime.parse(temp[5], formatter);
+        LocalDateTime startTime = LocalDateTime.parse(temp[5], FORMATTER);
         Duration duration = Duration.ofMinutes(Integer.parseInt(temp[6]));
-        LocalDateTime endTime = LocalDateTime.parse(temp[7], formatter);
+        LocalDateTime endTime = LocalDateTime.parse(temp[7], FORMATTER);
 
         switch (taskType) {
             case TASK:

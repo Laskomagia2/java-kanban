@@ -1,6 +1,7 @@
 package models;
 
 import com.taskmanager.FileBackedTaskManager;
+import com.taskmanager.Managers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
     FileBackedTaskManagerTest () {
-        super(new FileBackedTaskManager());
+        super(Managers.getFileBacked());
     }
 
     @Test

@@ -142,6 +142,8 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateTask(Task newTask) {
         if (newTask != null) {
             tasks.put(newTask.getTaskId(), newTask);
+            sortedTasksByDate.remove(tasks.get(newTask.getTaskId()));
+            sortedTasksByDate.add(newTask);
         }
     }
 
@@ -151,6 +153,8 @@ public class InMemoryTaskManager implements TaskManager {
             subtasks.put(newTask.getTaskId(), newTask);
             checkEpicStatus(epics.get(newTask.getEpicId()).getTaskId());
             checkEpicTime(epics.get(newTask.getEpicId()).getTaskId());
+            sortedTasksByDate.remove(subtasks.get(newTask.getTaskId()));
+            sortedTasksByDate.add(newTask);
         }
     }
 
@@ -165,14 +169,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTasks() {
         tasks.keySet()
-                .forEach(historyManager::remove);
+                .forEach(task -> {
+                    historyManager.remove(task);
+                    sortedTasksByDate.remove(tasks.get(task));
+                });
+
         tasks.clear();
     }
 
     @Override
     public void removeSubtasks() {
         subtasks.keySet()
-                .forEach(historyManager::remove);
+                .forEach(subtask -> {
+                    historyManager.remove(subtask);
+                    sortedTasksByDate.remove(subtasks.get(subtask));
+                });
         subtasks.clear();
         epics.values()
                 .forEach(epic -> {
@@ -194,6 +205,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeTasksById(int id) {
+        sortedTasksByDate.remove(tasks.get(id));
         tasks.remove(id);
         historyManager.remove(id);
     }
@@ -201,6 +213,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeSubtasksById(int subId) {
         int epicId = subtasks.get(subId).getEpicId();
+        sortedTasksByDate.remove(subtasks.get(subId));
         subtasks.remove(subId);
         historyManager.remove(subId);
         epics.get(epicId).getSubtasks().remove((Integer) subId);
@@ -247,8 +260,8 @@ public class InMemoryTaskManager implements TaskManager {
             thisEpic.setDuration(thisEpic.getDuration().plus(firstSubtaskInEpic.getDuration()));
             thisEpic.setEndTime(firstSubtaskInEpic.getStartTime().plus(thisEpic.getDuration()));
         } else if (thisEpic.getSubtasks().isEmpty()) {
-            thisEpic.setStartTime(LocalDateTime.of(1,1,1,0,0));
-            thisEpic.setEndTime(LocalDateTime.of(1,1,1,0,0));
+            thisEpic.setStartTime(LocalDateTime.MIN);
+            thisEpic.setEndTime(LocalDateTime.MIN);
             thisEpic.setDuration(Duration.ZERO);
         } else {
             thisEpic.getSubtasks()

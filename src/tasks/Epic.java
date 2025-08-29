@@ -15,7 +15,7 @@ public class Epic extends Task {
         super(name, context, startTime, duration);
         subtasks = new ArrayList<>();
         this.taskType = TaskType.EPIC;
-        this.startTime = LocalDateTime.of(1, 1, 1, 1, 1, 1);
+        this.startTime = LocalDateTime.MIN;
         setEndTime(startTime);
         this.duration = Duration.ZERO;
     }
