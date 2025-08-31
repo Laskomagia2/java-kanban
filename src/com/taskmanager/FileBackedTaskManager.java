@@ -1,5 +1,6 @@
-package com.taskManager;
+package com.taskmanager;
 
+import programexceptions.ManagerSaveException;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -8,8 +9,13 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
+
+    protected static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
 
     private Path path = Paths.get("SavedTasks.csv");
 
@@ -138,7 +144,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static String taskToString(Task task) {
         String res;
-        res = String.format("%d," + task.getTaskType() + ",%s," + task.getStatus() + ",%s", task.getTaskId(), task.getName(), task.getContext());
+        res = String.format("%d," + task.getTaskType() + ",%s," + task.getStatus() + ",%s" + "," +
+                task.getStartTime().format(FORMATTER) + "," + task.getDuration().toMinutes() + "," +
+                task.getEndTime().format(FORMATTER), task.getTaskId(), task.getName(), task.getContext());
         if (task.getTaskType() == TaskType.SUBTASK) {
             StringBuilder sb = new StringBuilder(res);
             sb.append(",");
@@ -155,25 +163,29 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String taskName = temp[2];
         String taskStatus = temp[3];
         String taskContext = temp[4];
+        LocalDateTime startTime = LocalDateTime.parse(temp[5], FORMATTER);
+        Duration duration = Duration.ofMinutes(Integer.parseInt(temp[6]));
+        LocalDateTime endTime = LocalDateTime.parse(temp[7], FORMATTER);
 
         switch (taskType) {
             case TASK:
-                Task task = new Task(taskName, taskContext);
+                Task task = new Task(taskName, taskContext, startTime, duration);
                 task.setStatus(taskStatus);
                 task.setTaskId(currentTaskId);
                 return task;
 
             case SUBTASK:
-                int subEpicId = Integer.parseInt(temp[5]);
-                Subtask subtask = new Subtask(taskName, taskContext, subEpicId);
+                int subEpicId = Integer.parseInt(temp[8]);
+                Subtask subtask = new Subtask(taskName, taskContext, subEpicId, startTime, duration);
                 subtask.setStatus(taskStatus);
                 subtask.setTaskId(currentTaskId);
                 return subtask;
 
             case EPIC:
-                Epic epic = new Epic(taskName, taskContext);
+                Epic epic = new Epic(taskName, taskContext, startTime, duration);
                 epic.setStatus(taskStatus);
                 epic.setTaskId(currentTaskId);
+                epic.setEndTime(endTime);
                 return epic;
 
             default:

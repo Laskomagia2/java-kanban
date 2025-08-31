@@ -1,4 +1,4 @@
-package com.taskManager;
+package com.taskmanager;
 
 import tasks.Task;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DoubleLinkedList {
-    private final Map<Integer, Node> historyHashMap = new HashMap<>();
+    private final Map<Integer, Node> historyHashMap = new HashMap<>();  //в качестве ключа - id задачи, значение - нода
     private Node head;
     private Node tail;
 
@@ -32,7 +32,6 @@ public class DoubleLinkedList {
             }
             historyHashMap.put(task.getTaskId(), node);
         }
-        return;
     }
 
     public List<Task> getTasks() {

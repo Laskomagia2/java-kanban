@@ -1,4 +1,4 @@
-package com.taskManager;
+package com.taskmanager;
 
 import tasks.Task;
 

@@ -1,4 +1,4 @@
-package com.taskManager;
+package com.taskmanager;
 
 public class Managers {
     private Managers() {
@@ -9,7 +9,7 @@ public class Managers {
         return new FileBackedTaskManager();
     }
 
-    public static TaskManager getDefault() {
+    public static InMemoryTaskManager getDefault() {
         return new InMemoryTaskManager();
     }
 

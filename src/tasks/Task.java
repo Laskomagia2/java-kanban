@@ -1,7 +1,9 @@
 package tasks;
 
-import com.taskManager.TaskType;
+import com.taskmanager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -10,12 +12,16 @@ public class Task {
     protected Status status;
     protected int taskId;
     protected TaskType taskType;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
-    public Task(String name, String context) {
+    public Task(String name, String context, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.context = context;
         this.status = Status.NEW;
         this.taskType = TaskType.TASK;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     @Override
@@ -69,6 +75,18 @@ public class Task {
 
     public TaskType getTaskType() {
         return taskType;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public  LocalDateTime getEndTime() {
+        return startTime.plus(duration);
     }
 
     @Override
